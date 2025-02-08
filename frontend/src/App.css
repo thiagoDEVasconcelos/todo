@@ -36,8 +36,14 @@ li {
 }
 
 .list-item {
+  width: 600px;
+  padding: 10px 20px;
+  border: solid white 2px;
+  border-radius: 10px;
+  background-color: #888;
+  margin-bottom: 10px;
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   gap: 10px;
 }
 

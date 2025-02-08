@@ -1,74 +1,49 @@
 import { useState } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 
-import './App.css'
+import Form from './components/Form';
+import Lista from './components/Lista';
 
 function App() {
-  const [tarefa, setTarefa] = useState("");
+  const [tarefa, setTarefa] = useState('');
   const [listaDeTarefas, setListaDeTarefas] = useState([]);
   const [edicaoIndex, setEdicaoIndex] = useState(null);
 
   const handleChange = (e) => {
-    setTarefa(e.target.value);    
-  }
+    setTarefa(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    
-    if (tarefa.trim() === "") return;
-    
+    if (tarefa.trim() === '') return;
+
     if (edicaoIndex !== null) {
       const novasTarefas = [...listaDeTarefas];
       novasTarefas[edicaoIndex] = tarefa.trim();
       setListaDeTarefas(novasTarefas);
-      setTarefa("");
-      setEdicaoIndex(null); 
+      setEdicaoIndex(null);
     } else {
-    const novaTarefa = tarefa.trim();
-    setListaDeTarefas([...listaDeTarefas, novaTarefa]);
-    setTarefa("");
+      setListaDeTarefas([...listaDeTarefas, tarefa.trim()]);
     }
-    
-  }
-  const handleEdit = (e, index)=> {
-    setTarefa(listaDeTarefas[index])
+    setTarefa('');
+  };
+
+  const handleEdit = (index) => {
+    setTarefa(listaDeTarefas[index]);
     setEdicaoIndex(index);
-  }
-  const handleDelete = (e, index) => {
-    e.preventDefault();
-    const novasTarefas = [...listaDeTarefas];
-    novasTarefas.splice(index, 1);
-    setListaDeTarefas([...novasTarefas])
-  }
+  };
+
+  const handleDelete = (index) => {
+    const novasTarefas = listaDeTarefas.filter((_, i) => i !== index);
+    setListaDeTarefas(novasTarefas);
+  };
 
   return (
     <>
       <h1>A LISTA 📋</h1>
-      <div>
-        <form action="#" className='form'>
-          <label htmlFor='list-item'>
-            O que está planejando para hoje? <br />
-          </label>
-          <div className='item-list-form'>
-            <input type="text" placeholder='JOGAR O LIXO FORA...' value={tarefa} className="input-text" name='list-item' onChange={handleChange} />
-            <button type="button" onClick={handleSubmit}>Adicionar</button>
-          </div>
-        </form>
-        <div className='list'>
-          <ul>
-            {listaDeTarefas.map((tarefa, index) => {
-              return <div key={index} className='list-item'>
-              <li key={index}>{tarefa}</li>
-              <EditIcon sx={{cursor: "pointer"}} onClick={(e) => handleEdit(e, index)}/>
-              <DeleteIcon sx={{cursor: "pointer"}} onClick={e => handleDelete(e, index)}/>
-              </div>
-            })}
-          </ul>
-        </div>
-      </div>
+      <Form tarefa={tarefa} handleChange={handleChange} handleSubmit={handleSubmit} />
+      <Lista listaDeTarefas={listaDeTarefas} handleEdit={handleEdit} handleDelete={handleDelete} />
     </>
-  )
+  );
 }
 
 export default App
